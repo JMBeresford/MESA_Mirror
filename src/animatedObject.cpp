@@ -5,14 +5,14 @@
 
 AnimatedRect::AnimatedRect(const sf::Vector2f& size)
 {
-	this->setSize(size);
-	this->fade = false;
-	this->flicker = false;
+	setSize(size);
+	fade = false;
+	flicker = false;
 }
 
 int AnimatedRect::getOpacity()
 {
-	return this->opacity;
+	return opacity;
 }
 
 void AnimatedRect::setOpacity(int opacity)

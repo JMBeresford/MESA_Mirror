@@ -14,7 +14,7 @@ private:
 	int opacity = 255;
 };
 
-
+/*
 class AnimatedCircle: public sf::CircleShape
 {
 public:
@@ -58,4 +58,4 @@ private:
 	bool fade, flicker;
 	int opacity = 255;
 };
-
+*/

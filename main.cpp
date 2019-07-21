@@ -1,5 +1,6 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
+#include "src/animatedObject.cpp"
 
 int main()
 {
@@ -11,7 +12,6 @@ int main()
 
 	if (!fnt.loadFromFile("assets/bladeRunner.ttf"))
 		std::cerr << "ERROR: Font failed to load. Exiting...";
-
 
 	while(window.isOpen()) // This is a loop for the program window to live in, each iter a frame
 	{
@@ -32,8 +32,11 @@ int main()
 			if(mirrorEvent.type == sf::Event::Closed) // Terminates the outer
 				window.close();			  // while loop when window is closed
 		}
-
-
+	
+		sf::Sprite canvasTex(canvas.getTexture());
+		window.clear();
+		window.draw(canvasTex);
+		window.display();
 
 	}
 
