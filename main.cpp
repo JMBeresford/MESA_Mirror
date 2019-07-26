@@ -42,8 +42,10 @@ void splashScreen(sf::RenderWindow& window, sf::Font& fnt)
 	sf::Vector2u screenSize = window.getSize();
 	sf::Texture corner; // Texture object used to draw images (from files, etc.)
 	sf::Vector2u position; // 2 dimensional unsigned int for use in changing position
+	sf::RenderTexture canvas; // Use this to have a buffer frame before drawing to screen
+	canvas.create(screenSize.x, screenSize.y); // Makes the buffer same size as screen
 
-	if (!corner.loadFromFile("assets/corner.png"))
+	if (!corner.loadFromFile("assets/corner.png")) // Loads image file into Texture object
 		std::cerr << "ERROR: Texture not found. Exiting...";
 	
 	sf::Sprite topLeft(corner); // Location defaults to top left corner of render
@@ -91,15 +93,29 @@ void splashScreen(sf::RenderWindow& window, sf::Font& fnt)
 				window.close();
 
 			if (mainEvent.type == sf::Event::Resized)
+			{
 				screenSize = window.getSize(); // In case of window resize
+				canvas.clear();
+				canvas.create(screenSize.x, screenSize.y);
+			}	
 		}
+
+		canvas.clear();
+
+		canvas.draw(topLeft);
+		canvas.draw(topRight);
+		canvas.draw(bottomLeft);
+		canvas.draw(bottomRight);
+
+		canvas.display();
+		sf::Sprite tex(canvas.getTexture());
 
 		window.clear(); // Needs to be cleared every frame
 		
-		window.draw(topLeft); // Draws the sprite to the RenderTexture
-		window.draw(topRight);
-		window.draw(bottomRight);
-		window.draw(bottomLeft);
+		window.draw(tex); // Draws the sprite to the RenderTexture
+		//window.draw(topRight);
+		//window.draw(bottomRight);
+		//window.draw(bottomLeft);
 		
 		window.display(); // Displays current window buffer on screen
 
