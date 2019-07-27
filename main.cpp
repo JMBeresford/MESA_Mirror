@@ -3,7 +3,8 @@
 #include "src/animatedSprite.hpp"
 
 void splashScreen(sf::RenderWindow&, sf::Font&);
-void setOriginToCenter(sf::Sprite&);
+void setSpriteOriginToCenter(sf::Sprite&);
+void setTextOriginToCenter(sf::Text&);
 
 int main()
 {
@@ -39,53 +40,80 @@ int main()
 
 void splashScreen(sf::RenderWindow& window, sf::Font& fnt)
 {
-	sf::Vector2u screenSize = window.getSize();
-	sf::Texture corner; // Texture object used to draw images (from files, etc.)
-	sf::Vector2u position; // 2 dimensional unsigned int for use in changing position
+	sf::Vector2f screenSize = sf::Vector2f(window.getSize()),
+				 margin(screenSize.x * 1/15, screenSize.y * 1/15),
+				 cursorPos;
+	sf::Text enterText("Enter", fnt, 55),
+			 mesaText("Mesa", fnt, 55);
+	sf::Texture corner, ringTex, shadowTex; // Texture object used to draw images (from files, etc.)
 	sf::RenderTexture canvas; // Use this to have a buffer frame before drawing to screen
+
 	canvas.create(screenSize.x, screenSize.y); // Makes the buffer same size as screen
 
-	if (!corner.loadFromFile("assets/corner.png")) // Loads image file into Texture object
-		std::cerr << "ERROR: Texture not found. Exiting...";
+	if(!corner.loadFromFile("assets/corner.png")) // Loads image file into Texture object
+		std::cerr << "ERROR: Corner texture not found. Exiting...";
 	
+	if(!ringTex.loadFromFile("assets/ring.png"))
+		std::cerr << "ERROR: Ring texture not found. Exiting...";
+
+	if(!shadowTex.loadFromFile("assets/ringShadow.png"))
+		std::cerr << "ERROR: Shadow texture not found. Exiting...";
+
 	sf::Sprite topLeft(corner); // Location defaults to top left corner of render
-	setOriginToCenter(topLeft); // Due to origin change will need to change position
-	topLeft.setPosition(corner.getSize().x / 2, corner.getSize().y / 2);
+	setSpriteOriginToCenter(topLeft); // Due to origin change will need to change position
+	topLeft.setPosition(corner.getSize().x / 2 + margin.x,
+						corner.getSize().y / 2 + margin.y);
 
 	sf::Sprite topRight(corner); // Will need to adjust location and rotation
-	setOriginToCenter(topRight);
+	setSpriteOriginToCenter(topRight);
 	topRight.rotate(90);
-	position = (sf::Vector2u(screenSize.x - corner.getSize().x / 2, 
-				 corner.getSize().y / 2));      // Sets location to screen width        
-								// minus the width of the image
-								// for x coordinate,
-								// division by 2 to account for
+	topRight.setPosition(screenSize.x - (corner.getSize().x / 2 + margin.x), 
+							corner.getSize().y / 2 + margin.y);      
+								// Sets location to screen width        
+								// minus the width of the image,
+								// and same for height and y axis.
+								// Division by 2 to account for
 								// centered origin
-								    
-	// Need to do some fancy type conversions between sf::Vector2u and sf::Vector2f
-	// due to argument restrictions of these function calls; thus the Vector constructions
-	// in the above and below function calls (f meaning 'float' and u 'unsigned int')
-	// TODO: These conversions are unneccessary, remove them.
-	topRight.setPosition(sf::Vector2f(position.x, position.y));
-
+						
 	sf::Sprite bottomRight(corner);
-	setOriginToCenter(bottomRight);
+	setSpriteOriginToCenter(bottomRight);
 	bottomRight.rotate(180);
-	bottomRight.setPosition(screenSize.x - corner.getSize().x / 2,
-				screenSize.y - corner.getSize().y / 2);
+	bottomRight.setPosition(screenSize.x - (corner.getSize().x / 2 + margin.x),
+				screenSize.y - (corner.getSize().y / 2 + margin.y));
 	
 	sf::Sprite bottomLeft(corner);
-	setOriginToCenter(bottomLeft);
+	setSpriteOriginToCenter(bottomLeft);
 	bottomLeft.rotate(270);
-	position = sf::Vector2u(corner.getSize().x / 2,
-				screenSize.y - corner.getSize().y / 2);
+	bottomLeft.setPosition(corner.getSize().x / 2 + margin.x,
+						   screenSize.y - (corner.getSize().y / 2 + margin.y));
 
-	bottomLeft.setPosition(sf::Vector2f(position.x, position.y));
+	sf::Sprite ring(ringTex);
+	setSpriteOriginToCenter(ring);
+	ring.setPosition(sf::Vector2f(screenSize.x / 2.0f, screenSize.y / 2.0f));
 
+	sf::Sprite shadow(shadowTex);
+	setSpriteOriginToCenter(shadow);
+	shadow.setPosition(sf::Vector2f(screenSize.x / 2.0f, screenSize.y / 2.0f));
+
+	sf::FloatRect textSize = enterText.getLocalBounds();
+
+	setTextOriginToCenter(enterText);
+	enterText.setPosition(sf::Vector2f(screenSize.x / 2.0f,
+									   screenSize.y / 2.0f - (textSize.height / 2 + 5)));
+
+	setTextOriginToCenter(mesaText);
+	mesaText.setPosition(sf::Vector2f(screenSize.x / 2.0f,
+									   screenSize.y / 2.0f + (textSize.height / 2 + 5)));
 
 	sf::Event mainEvent; // New event object for this 'screen'
 	while(window.isOpen())
 	{
+		cursorPos = sf::Vector2f(sf::Mouse::getPosition(window));
+		if(ring.getGlobalBounds().contains(cursorPos))
+			ring.rotate(2);
+		else
+			ring.rotate(1);
+		
 
 		while(window.pollEvent(mainEvent))
 		{
@@ -94,7 +122,7 @@ void splashScreen(sf::RenderWindow& window, sf::Font& fnt)
 
 			if (mainEvent.type == sf::Event::Resized)
 			{
-				screenSize = window.getSize(); // In case of window resize
+				screenSize = sf::Vector2f(window.getSize()); // In case of window resize
 				canvas.clear();
 				canvas.create(screenSize.x, screenSize.y);
 			}	
@@ -106,6 +134,10 @@ void splashScreen(sf::RenderWindow& window, sf::Font& fnt)
 		canvas.draw(topRight);
 		canvas.draw(bottomLeft);
 		canvas.draw(bottomRight);
+		canvas.draw(ring);
+		canvas.draw(shadow);
+		canvas.draw(enterText);
+		canvas.draw(mesaText);
 
 		canvas.display();
 		sf::Sprite tex(canvas.getTexture());
@@ -122,7 +154,7 @@ void splashScreen(sf::RenderWindow& window, sf::Font& fnt)
 	}
 }
 
-void setOriginToCenter(sf::Sprite& spr)
+void setSpriteOriginToCenter(sf::Sprite& spr)
 {
 	/* In SFML, objects have an origin that act as the center of all transformations, such as
 	 * rotation and position. The default value is the top left corner of said object
@@ -133,4 +165,17 @@ void setOriginToCenter(sf::Sprite& spr)
 	sf::FloatRect bounds = spr.getLocalBounds();
 
 	spr.setOrigin(bounds.left + bounds.width / 2.0f, bounds.top + bounds.height / 2.0f);
+}
+
+void setTextOriginToCenter(sf::Text& txt)
+{
+	/* In SFML, objects have an origin that act as the center of all transformations, such as
+	 * rotation and position. The default value is the top left corner of said object
+	 * (essetentially 0,0 in its local coordinate space). I find centering the origin
+	 * makes transformations much easier thus this function.
+	 */
+
+	sf::FloatRect bounds = txt.getLocalBounds();
+
+	txt.setOrigin(bounds.left + bounds.width / 2.0f, bounds.top + bounds.height / 2.0f);
 }
