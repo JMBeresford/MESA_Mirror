@@ -125,7 +125,7 @@ void splashScreen(sf::RenderWindow& window, sf::Font& fnt)
 				screenSize = sf::Vector2f(window.getSize()); // In case of window resize
 				canvas.clear();
 				canvas.create(screenSize.x, screenSize.y);
-			}	
+			}
 		}
 
 		canvas.clear();
@@ -145,9 +145,6 @@ void splashScreen(sf::RenderWindow& window, sf::Font& fnt)
 		window.clear(); // Needs to be cleared every frame
 		
 		window.draw(tex); // Draws the sprite to the RenderTexture
-		//window.draw(topRight);
-		//window.draw(bottomRight);
-		//window.draw(bottomLeft);
 		
 		window.display(); // Displays current window buffer on screen
 
