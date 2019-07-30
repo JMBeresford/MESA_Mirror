@@ -11,6 +11,7 @@ public:
 	void setOriginToCenter(); // Sets the origin of the shape to its center
 	void animate(); // Function to maniuplate opacity to simulate animation
 private:
+	int patricksIdea[10];
 	bool fade, flicker;
 	int opacity = 255;
 	sf::Texture t;

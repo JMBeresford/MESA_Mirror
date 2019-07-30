@@ -40,6 +40,7 @@ int main()
 
 void splashScreen(sf::RenderWindow& window, sf::Font& fnt)
 {
+	sf::Clock timer;
 	sf::Vector2f screenSize = sf::Vector2f(window.getSize()),
 				 margin(screenSize.x * 1/15, screenSize.y * 1/15),
 				 cursorPos;
@@ -59,12 +60,12 @@ void splashScreen(sf::RenderWindow& window, sf::Font& fnt)
 	if(!shadowTex.loadFromFile("assets/ringShadow.png"))
 		std::cerr << "ERROR: Shadow texture not found. Exiting...";
 
-	sf::Sprite topLeft(corner); // Location defaults to top left corner of render
+	AnimatedSprite topLeft(corner); // Location defaults to top left corner of render
 	setSpriteOriginToCenter(topLeft); // Due to origin change will need to change position
 	topLeft.setPosition(corner.getSize().x / 2 + margin.x,
 						corner.getSize().y / 2 + margin.y);
 
-	sf::Sprite topRight(corner); // Will need to adjust location and rotation
+	AnimatedSprite topRight(corner); // Will need to adjust location and rotation
 	setSpriteOriginToCenter(topRight);
 	topRight.rotate(90);
 	topRight.setPosition(screenSize.x - (corner.getSize().x / 2 + margin.x), 
@@ -75,13 +76,13 @@ void splashScreen(sf::RenderWindow& window, sf::Font& fnt)
 								// Division by 2 to account for
 								// centered origin
 						
-	sf::Sprite bottomRight(corner);
+	AnimatedSprite bottomRight(corner);
 	setSpriteOriginToCenter(bottomRight);
 	bottomRight.rotate(180);
 	bottomRight.setPosition(screenSize.x - (corner.getSize().x / 2 + margin.x),
 				screenSize.y - (corner.getSize().y / 2 + margin.y));
 	
-	sf::Sprite bottomLeft(corner);
+	AnimatedSprite bottomLeft(corner);
 	setSpriteOriginToCenter(bottomLeft);
 	bottomLeft.rotate(270);
 	bottomLeft.setPosition(corner.getSize().x / 2 + margin.x,
@@ -103,7 +104,7 @@ void splashScreen(sf::RenderWindow& window, sf::Font& fnt)
 
 	setTextOriginToCenter(mesaText);
 	mesaText.setPosition(sf::Vector2f(screenSize.x / 2.0f,
-									   screenSize.y / 2.0f + (textSize.height / 2 + 5)));
+									  screenSize.y / 2.0f + (textSize.height / 2 + 5)));
 
 	sf::Event mainEvent; // New event object for this 'screen'
 	while(window.isOpen())
@@ -130,6 +131,11 @@ void splashScreen(sf::RenderWindow& window, sf::Font& fnt)
 
 		canvas.clear();
 
+		topLeft.animate();
+		topRight.animate();
+		bottomLeft.animate();
+		bottomRight.animate();
+
 		canvas.draw(topLeft);
 		canvas.draw(topRight);
 		canvas.draw(bottomLeft);
@@ -148,6 +154,8 @@ void splashScreen(sf::RenderWindow& window, sf::Font& fnt)
 		
 		window.display(); // Displays current window buffer on screen
 
+		if(timer.getElapsedTime().asSeconds() > 60)
+			timer.restart();
 	}
 }
 
