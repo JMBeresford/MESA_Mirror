@@ -1,6 +1,7 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include "src/animatedSprite.hpp"
+#include <vector>
 
 void splashScreen(sf::RenderWindow&, sf::Font&);
 void setSpriteOriginToCenter(sf::Sprite&);
@@ -34,18 +35,18 @@ int main()
 	
 		splashScreen(window, fnt);
 	}
-
 	return 0;
 }
 
 void splashScreen(sf::RenderWindow& window, sf::Font& fnt)
 {
-	sf::Clock timer;
-	sf::Vector2f screenSize = sf::Vector2f(window.getSize()),
-				 margin(screenSize.x * 1/15, screenSize.y * 1/15),
-				 cursorPos;
-	sf::Text enterText("Enter", fnt, 55),
-			 mesaText("Mesa", fnt, 55);
+	sf::Vector2f	screenSize = sf::Vector2f(window.getSize()),
+					margin(screenSize.x * 1/15, screenSize.y * 1/15),
+					cursorPos;
+	
+	sf::Text	enterText("Enter", fnt, 55),
+				mesaText("Mesa", fnt, 55);
+	
 	sf::Texture corner, ringTex, shadowTex; // Texture object used to draw images (from files, etc.)
 	sf::RenderTexture canvas; // Use this to have a buffer frame before drawing to screen
 
@@ -60,33 +61,31 @@ void splashScreen(sf::RenderWindow& window, sf::Font& fnt)
 	if(!shadowTex.loadFromFile("assets/ringShadow.png"))
 		std::cerr << "ERROR: Shadow texture not found. Exiting...";
 
-	AnimatedSprite topLeft(corner); // Location defaults to top left corner of render
+	AnimatedSprite topLeft(corner, 0); // Location defaults to top left corner of render
 	setSpriteOriginToCenter(topLeft); // Due to origin change will need to change position
 	topLeft.setPosition(corner.getSize().x / 2 + margin.x,
 						corner.getSize().y / 2 + margin.y);
 
-	AnimatedSprite topRight(corner); // Will need to adjust location and rotation
+	AnimatedSprite topRight(corner, 1); // Will need to adjust location and rotation
 	setSpriteOriginToCenter(topRight);
 	topRight.rotate(90);
-	topRight.setPosition(screenSize.x - (corner.getSize().x / 2 + margin.x), 
+	topRight.setPosition(	screenSize.x - (corner.getSize().x / 2 + margin.x), 
 							corner.getSize().y / 2 + margin.y);      
-								// Sets location to screen width        
-								// minus the width of the image,
-								// and same for height and y axis.
-								// Division by 2 to account for
-								// centered origin
+	// Sets location to screen width minus the width of the image,
+	// and same for height and y axis. Division by 2 to account for
+	// centered origin
 						
-	AnimatedSprite bottomRight(corner);
+	AnimatedSprite bottomRight(corner, 2);
 	setSpriteOriginToCenter(bottomRight);
 	bottomRight.rotate(180);
 	bottomRight.setPosition(screenSize.x - (corner.getSize().x / 2 + margin.x),
-				screenSize.y - (corner.getSize().y / 2 + margin.y));
-	
-	AnimatedSprite bottomLeft(corner);
+							screenSize.y - (corner.getSize().y / 2 + margin.y));
+
+	AnimatedSprite bottomLeft(corner, 3);
 	setSpriteOriginToCenter(bottomLeft);
 	bottomLeft.rotate(270);
-	bottomLeft.setPosition(corner.getSize().x / 2 + margin.x,
-						   screenSize.y - (corner.getSize().y / 2 + margin.y));
+	bottomLeft.setPosition( corner.getSize().x / 2 + margin.x,
+							screenSize.y - (corner.getSize().y / 2 + margin.y));
 
 	sf::Sprite ring(ringTex);
 	setSpriteOriginToCenter(ring);
@@ -99,12 +98,12 @@ void splashScreen(sf::RenderWindow& window, sf::Font& fnt)
 	sf::FloatRect textSize = enterText.getLocalBounds();
 
 	setTextOriginToCenter(enterText);
-	enterText.setPosition(sf::Vector2f(screenSize.x / 2.0f,
-									   screenSize.y / 2.0f - (textSize.height / 2 + 5)));
+	enterText.setPosition(sf::Vector2f(	screenSize.x / 2.0f,
+										screenSize.y / 2.0f - (textSize.height / 2 + 5)));
 
 	setTextOriginToCenter(mesaText);
-	mesaText.setPosition(sf::Vector2f(screenSize.x / 2.0f,
-									  screenSize.y / 2.0f + (textSize.height / 2 + 5)));
+	mesaText.setPosition(sf::Vector2f(	screenSize.x / 2.0f,
+										screenSize.y / 2.0f + (textSize.height / 2 + 5)));
 
 	sf::Event mainEvent; // New event object for this 'screen'
 	while(window.isOpen())
@@ -142,9 +141,9 @@ void splashScreen(sf::RenderWindow& window, sf::Font& fnt)
 		canvas.draw(bottomRight);
 		canvas.draw(ring);
 		canvas.draw(shadow);
-		canvas.draw(enterText);
 		canvas.draw(mesaText);
-
+		canvas.draw(enterText);
+		
 		canvas.display();
 		sf::Sprite tex(canvas.getTexture());
 
@@ -153,9 +152,6 @@ void splashScreen(sf::RenderWindow& window, sf::Font& fnt)
 		window.draw(tex); // Draws the sprite to the RenderTexture
 		
 		window.display(); // Displays current window buffer on screen
-
-		if(timer.getElapsedTime().asSeconds() > 60)
-			timer.restart();
 	}
 }
 

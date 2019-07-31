@@ -3,16 +3,13 @@
 class AnimatedSprite: public sf::Sprite
 {
 public:
-	AnimatedSprite();
-	AnimatedSprite(const sf::Texture&);
-	int getOpacity(); // returns current opacity
-	void setOpacity(int); // sets new opacityc
+	AnimatedSprite(const sf::Texture&, unsigned); // constructor
 
-	void setOriginToCenter(); // Sets the origin of the shape to its center
 	void animate(); // Function to maniuplate opacity to simulate animation
 private:
 	int patricksIdea[10];
-	bool fade, flicker;
-	int opacity = 255;
+	bool flicker;
+	unsigned index;
 	sf::Texture t;
+	sf::Clock timer;
 };

@@ -4,74 +4,38 @@
 #include <iostream>
 #include <chrono>
 
-AnimatedSprite::AnimatedSprite()
+AnimatedSprite::AnimatedSprite(const sf::Texture &tex, unsigned index)
 {
-	srand(time(NULL));
-	this->fade = false;
-	this->flicker = false;
-	for(size_t i = 0; i < sizeof(this->patricksIdea); i++)
-		this->patricksIdea[i] = rand() % 30 + 1;
-
-}
-
-AnimatedSprite::AnimatedSprite(const sf::Texture &tex)
-{
-	srand(time(NULL));
+	srand(this->patricksIdea[index]);
 	this->setTexture(tex);
 	this->t = tex;
-	this->fade = false;
 	this->flicker = false;
-	for(size_t i = 0; i < sizeof(this->patricksIdea); i++)
-		this->patricksIdea[i] = rand() % 30 + 1;
-
-}
-
-int AnimatedSprite::getOpacity()
-{
-	return this->opacity;
-}
-
-void AnimatedSprite::setOpacity(int opacity)
-{
-	this->opacity = opacity;
-}
-
-void AnimatedSprite::setOriginToCenter()
-{
-	sf::FloatRect temp = this->getLocalBounds();
-
-	this->setOrigin(temp.left + temp.width / 2.0f,
-			temp.top + temp.height / 2.0f);
+	this->index = index;
+	for(size_t i = 0; i < sizeof(this->patricksIdea)/sizeof(this->patricksIdea[0]); i++)
+		this->patricksIdea[i] = (rand() % 30) + 6;
 }
 
 void AnimatedSprite::animate()
 {
-	if (!this->flicker)
-	{
-		srand(time(NULL));
-		int num = (rand() + int(this->getPosition().x) + int(this->getPosition().y)) % 100 + 1;
-		//std::cout << "num is: " << num;
-		if (0 < num && num < 8) { this->flicker=true; }
-	}
-	else
-		this->fade = true;
+	if(this->timer.getElapsedTime().asSeconds() > this->patricksIdea[this->index])
+		this->flicker = true;
 
-	if(this->fade)
+	if(flicker)
 	{
-		if (this->getColor().toInteger() <= 4294967040)
+		if (this->getColor().toInteger() <= 4294967040) // Checks for full transparency to end the animation
 		{
 			this->setColor(sf::Color(this->getColor()+sf::Color(0,0,0,255)));
-			this->opacity = 0;
-			this->setTexture(this->t);
+			//this->setTexture(this->t);
 			this->flicker = false;
-			this->fade = false;
+			this->index = rand() % 10;
+			for(size_t i = 0; i < sizeof(this->patricksIdea)/sizeof(this->patricksIdea[0]); i++)
+				this->patricksIdea[i] = (rand() % 25) + 6;
+			this->timer.restart();
 		}
 		else
 		{
 			sf::Color old = this->getColor();
 			this->setColor(old - sf::Color(0,0,0,25));
-			std::cout << this->getColor().toInteger() << std::endl;
 		}
-		
 	}
 }
