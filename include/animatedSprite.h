@@ -5,7 +5,7 @@ class AnimatedSprite: public sf::Sprite
 public:
 	AnimatedSprite(const sf::Texture&, unsigned); // constructor
 
-	void animate(); // Function to maniuplate opacity to simulate animation
+	void animate(); // Function to manipulate opacity to simulate animation
 private:
 	int patricksIdea[10];
 	bool flicker;

@@ -25,7 +25,7 @@ void AnimatedSprite::animate()
 		if (this->getColor().toInteger() <= 4294967040) // Checks for full transparency to end the animation
 		{
 			this->setColor(sf::Color(this->getColor()+sf::Color(0,0,0,255)));
-			//this->setTexture(this->t);
+			this->setTexture(this->t);
 			this->flicker = false;
 			this->index = rand() % 10;
 			for(size_t i = 0; i < sizeof(this->patricksIdea)/sizeof(this->patricksIdea[0]); i++)
