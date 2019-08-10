@@ -1,5 +1,4 @@
 #include <SFML/Graphics.hpp>
-#include "../src/screen.hpp"
 
 class SplashScreen : public sf::RenderTexture
 {

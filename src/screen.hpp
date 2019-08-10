@@ -8,7 +8,6 @@ Screen::Screen(sf::RenderWindow& w)
     this->corner.loadFromFile("assets/corner.png");
 
     this->create(this->screenSize.x, this->screenSize.y);
-    this->initialize();
 
     for(size_t i = 0; i < 4; i++)
     {
@@ -32,8 +31,8 @@ Screen::Screen(sf::RenderWindow& w)
 
 void Screen::animate()
 {
-    for (auto i : this->cornerSprites)
-        i.animate();
+    for (size_t i = 0; i < this->cornerSprites.size(); i++)
+        this->cornerSprites[i].animate();
 }
 
 void Screen::drawCorners()

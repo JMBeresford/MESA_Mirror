@@ -1,5 +1,6 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
+#include "src/screen.hpp"
 #include "src/splashScreen.hpp"
 
 void splashScreen(sf::RenderWindow&);
@@ -12,13 +13,14 @@ int main()
 	
 	while(window.isOpen()) // This is a loop for the program window to live in, each iter a frame
 	{
-		window.setFramerateLimit(60);
-					       // representing screen size
-		
-	// It is highly encouraged to read through the documentation for SFML events
-	// before attempting anything significant here. The event system is integral to
-	// the operation of an SFML window and the documentation on their website will prove
-	// quite insightful.
+		window.setFramerateLimit(60); // Limits framerate to 60
+
+	/*	
+	It is highly encouraged to read through the documentation for SFML events
+	before attempting anything significant here. The event system is integral to
+	the operation of an SFML window and the documentation on their website will prove
+	quite insightful.
+	*/
 
 		sf::Event mirrorEvent; // This is the event object that all SFML events will be
 		while(window.pollEvent(mirrorEvent)) // appended to, and the loop that iterates
@@ -28,21 +30,32 @@ int main()
 				window.close();			  // while loop when window is closed
 		}
 	
-		splashScreen(window);
+		splashScreen(window); // Call to the splashScreen function, passing it the window
 	}
 	return 0;
 }
 
 void splashScreen(sf::RenderWindow& window)
 {
-	Screen Corners(window);
-	SplashScreen Splash(window);
+	Screen Corners(window); // Class used to draw the corner images
+	SplashScreen Splash(window); // Class used to draw the splash screen ('enter mesa' ring)
+	/*
+	sf::Vectors are essentially pairs of values, and are objects provided by SFML
+	Vector2fs contain 'floats', Vector2i 'ints' and Vector2u 'unsigned ints'
+	These pairs can be indexed with .x and .y
+	
+	EXAMPLE: given a sf::Vector2i, named "coordinates", with values (4,5),
+	printing coordinates.x to console will print 4, and coordinates.y will print 5.
+	*/
 	sf::Vector2f cursorPos;
 
 	sf::Event mainEvent; // New event object for this 'screen'
 	while(window.isOpen())
 	{
+		// Updates location of mouse every frame
 		cursorPos = sf::Vector2f(sf::Mouse::getPosition(window));
+
+		// The ring will rotate 2 degrees per frame if the mouse is over it, else 1 per frame
 		if(Splash.getRingPos().contains(cursorPos))
 			Splash.rotateRing(2);
 		else
@@ -56,28 +69,39 @@ void splashScreen(sf::RenderWindow& window)
 
 			if (mainEvent.type == sf::Event::Resized)
 			{
-				sf::Vector2f screenSize = sf::Vector2f(window.getSize()); // In case of window resize
-				Corners.clear();
-				Corners.create(screenSize.x, screenSize.y);
+				// In case of window resize
+				sf::Vector2f screenSize = sf::Vector2f(window.getSize());
+			}
+
+			if (mainEvent.type == sf::Event::KeyPressed)
+			{
+				// Checks for alt+f4 and quits is pressed
+				if (mainEvent.key.code == sf::Keyboard::F4)
+					if (sf::Keyboard::isKeyPressed(sf::Keyboard::LAlt))
+						window.close();
 			}
 		}
 
+		// RenderTextures need to be cleared/updated/redrawn every frame
+		// we give it a transparent color for the clear so that every texture can be
+		// seen layered on top of each other
 		Corners.clear();
 		Splash.clear(sf::Color::Transparent);
 
-		Corners.animate();
+		Corners.animate(); // Check the animatedSprite source in the src folder
 
+		Splash.drawRing(); // Check relevant source files
 		Corners.drawCorners();
-		Splash.drawRing();
 
-		Corners.display();
+		Corners.display(); // Makes the things drawn to the texture 'visable'
 		Splash.display();
 
-		sf::Sprite cornerTex(Corners.getTexture());
-		sf::Sprite splashTex(Splash.getTexture());
+		sf::Sprite cornerTex(Corners.getTexture()); // Creates sprites of each texture
+		sf::Sprite splashTex(Splash.getTexture());  // in prep for drawing to screen
+
 		window.clear(); // Needs to be cleared every frame
 		
-		window.draw(cornerTex); // Draws the sprite to the RenderTexture
+		window.draw(cornerTex); // Draws the sprites to the RenderWindow
 		window.draw(splashTex);
 
 		window.display(); // Displays current window buffer on screen

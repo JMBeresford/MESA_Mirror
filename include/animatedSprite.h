@@ -7,9 +7,8 @@ public:
 
 	void animate(); // Function to manipulate opacity to simulate animation
 private:
-	int patricksIdea[10];
-	bool flicker;
-	unsigned index;
-	sf::Texture t;
-	sf::Clock timer;
+	int patricksIdea[10]; // array of random nums 5-30 to be used as intervals for animation
+	bool flicker; // flag for animation
+	unsigned index; // used to index the above array
+	sf::Clock timer; // used for the interval
 };
