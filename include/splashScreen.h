@@ -3,14 +3,14 @@
 class SplashScreen : public sf::RenderTexture
 {
 public:
-    SplashScreen(sf::RenderWindow&);
+    SplashScreen(sf::RenderWindow&); // ctor
 
     void rotateRing(int);
     void setTextOriginToCenter(sf::Text&);
     void setSpriteOriginToCenter(sf::Sprite&);
     sf::FloatRect getRingPos();
-    void drawAll();
-    std::string doTime(sf::Vector2f&);
+    void drawAll(); // Draws all objects to the RenderTexture
+    std::string doTime(sf::Vector2f&); // Sets clock and positions it
 
 private:
     sf::Font fnt;

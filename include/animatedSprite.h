@@ -3,7 +3,7 @@
 class AnimatedSprite: public sf::Sprite
 {
 public:
-	AnimatedSprite(const sf::Texture&, unsigned); // constructor
+	AnimatedSprite(const sf::Texture&, unsigned); // ctor
 
 	void animate(); // Function to manipulate opacity to simulate animation
 private:

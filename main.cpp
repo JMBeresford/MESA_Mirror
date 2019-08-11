@@ -85,7 +85,7 @@ void splashScreen(sf::RenderWindow& window)
 		// RenderTextures need to be cleared/updated/redrawn every frame
 		// we give it a transparent color for the clear so that every texture can be
 		// seen layered on top of each other
-		Corners.clear();
+		Corners.clear(sf::Color::Transparent);
 		Splash.clear(sf::Color::Transparent);
 
 		Corners.animate(); // Check the animatedSprite source in the src folder
@@ -100,7 +100,7 @@ void splashScreen(sf::RenderWindow& window)
 		sf::Sprite cornerTex(Corners.getTexture()); // Creates sprites of each texture
 		sf::Sprite splashTex(Splash.getTexture());  // in prep for drawing to screen
 
-		window.clear(); // Needs to be cleared every frame
+		window.clear(); // Needs to be cleared every frame (defaults to black)
 		
 		window.draw(cornerTex); // Draws the sprites to the RenderWindow
 		window.draw(splashTex);

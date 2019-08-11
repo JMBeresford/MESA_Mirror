@@ -76,12 +76,13 @@ sf::FloatRect SplashScreen::getRingPos()
 
 std::string SplashScreen::doTime(sf::Vector2f& screenSize)
 {
-    char timeStr[12];
-    struct tm * timeinfo;
+    // Read the ctime docs at cppreference website to better understand these functions
+    char timeStr[9];
+    struct tm* timeinfo;
     this->time = std::time(NULL); // Sets the time object to current time (rawtime)
     timeinfo = std::localtime(&this->time); // Sets to local time
 
-    std::strftime(timeStr,12,"%I:%M:%S",timeinfo); // Creates string of human readable local time
+    std::strftime(timeStr,9,"%I:%M:%S",timeinfo); // Creates string of human readable local time
     this->timeText.setString(timeStr);
 
     setTextOriginToCenter(this->timeText); // Needs to be done every time the string changes
