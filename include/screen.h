@@ -5,11 +5,11 @@
 class Screen : public sf::RenderTexture
 {
 public:
-    Screen(sf::RenderWindow&);
+    Screen(sf::RenderWindow&); // ctor
     
-    void animate();
-    void drawCorners();
-    void setSpriteOriginToCenter(AnimatedSprite&);
+    void animate(); // Will be used to call the animate functions of the AnimatedSprites
+    void drawCorners(); // Used to draw the AnimatedSprites
+    void setSpriteOriginToCenter(AnimatedSprite&); // Check definition in src folder
 
 private:
     sf::Texture corner;

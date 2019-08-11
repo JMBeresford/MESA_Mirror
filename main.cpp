@@ -47,7 +47,7 @@ void splashScreen(sf::RenderWindow& window)
 	EXAMPLE: given a sf::Vector2i, named "coordinates", with values (4,5),
 	printing coordinates.x to console will print 4, and coordinates.y will print 5.
 	*/
-	sf::Vector2f cursorPos;
+	sf::Vector2f cursorPos, screenSize(sf::Vector2f(window.getSize()));
 
 	sf::Event mainEvent; // New event object for this 'screen'
 	while(window.isOpen())
@@ -89,8 +89,9 @@ void splashScreen(sf::RenderWindow& window)
 		Splash.clear(sf::Color::Transparent);
 
 		Corners.animate(); // Check the animatedSprite source in the src folder
+		Splash.doTime(screenSize); // Sets clock
 
-		Splash.drawRing(); // Check relevant source files
+		Splash.drawAll(); // Check relevant source files
 		Corners.drawCorners();
 
 		Corners.display(); // Makes the things drawn to the texture 'visable'

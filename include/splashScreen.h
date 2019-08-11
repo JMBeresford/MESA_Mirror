@@ -9,11 +9,13 @@ public:
     void setTextOriginToCenter(sf::Text&);
     void setSpriteOriginToCenter(sf::Sprite&);
     sf::FloatRect getRingPos();
-    void drawRing();
+    void drawAll();
+    std::string doTime(sf::Vector2f&);
 
 private:
     sf::Font fnt;
+    std::time_t time;
     sf::Texture ringTex, shadowTex;
     sf::Sprite ring, shadow;
-    sf::Text mesaText, enterText;
+    sf::Text mesaText, enterText, timeText;
 };
