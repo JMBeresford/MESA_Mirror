@@ -4,8 +4,7 @@
 #include "src/splashScreen.hpp"
 
 void splashScreen(sf::RenderWindow&);
-void setSpriteOriginToCenter(sf::Sprite&);
-void setTextOriginToCenter(sf::Text&);
+void clubListScreen(sf::RenderWindow&);
 
 int main()
 {
@@ -80,6 +79,15 @@ void splashScreen(sf::RenderWindow& window)
 					if (sf::Keyboard::isKeyPressed(sf::Keyboard::LAlt))
 						window.close();
 			}
+
+			if (mainEvent.type == sf::Event::MouseButtonPressed)
+			{
+				if (mainEvent.mouseButton.button == sf::Mouse::Left && Splash.getRingPos().contains(cursorPos))
+				{
+					clubListScreen(window);
+					return;
+				}
+			}
 		}
 
 		// RenderTextures need to be cleared/updated/redrawn every frame
@@ -109,3 +117,19 @@ void splashScreen(sf::RenderWindow& window)
 	}
 }
 
+void clubListScreen(sf::RenderWindow& window)
+{
+	Screen corners(window);
+	sf::Vector2f cursorPos, screenSize(sf::Vector2f(window.getSize()));
+
+	sf::Event clubListEvent;
+	while (window.isOpen())
+	{
+		cursorPos = sf::Vector2f(sf::Mouse::getPosition(window));
+
+		while (window.pollEvent(clubListEvent))
+		{
+
+		}
+	}
+}
