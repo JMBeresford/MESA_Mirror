@@ -1,6 +1,6 @@
 #include <SFML/Graphics.hpp>
 #include <ctime>
-#include "../include/splashScreen.h"
+#include "splashScreen.h"
 
 SplashScreen::SplashScreen(sf::RenderWindow& w)
 {

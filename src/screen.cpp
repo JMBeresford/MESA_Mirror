@@ -1,5 +1,5 @@
 #include <SFML/Graphics.hpp>
-#include "../include/screen.h"
+#include "screen.h"
 
 Screen::Screen(sf::RenderWindow& w)
 {

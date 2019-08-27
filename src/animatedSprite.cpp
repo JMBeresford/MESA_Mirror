@@ -1,5 +1,5 @@
 #include <SFML/Graphics.hpp>
-#include "../include/animatedSprite.h"
+#include "animatedSprite.h"
 #include <random>
 #include <iostream>
 #include <chrono>

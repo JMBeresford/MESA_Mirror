@@ -1,7 +1,9 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
-#include "src/screen.hpp"
-#include "src/splashScreen.hpp"
+#include "screen.cpp"
+#include "splashScreen.cpp"
+#include "clubList.cpp"
+namespace fs = std::experimental::filesystem;
 
 void splashScreen(sf::RenderWindow&);
 void clubListScreen(sf::RenderWindow&);
@@ -9,7 +11,7 @@ void clubListScreen(sf::RenderWindow&);
 int main()
 {
 	sf::RenderWindow window(sf::VideoMode(800,600), "Mesa Mirror", sf::Style::Default);
-	
+
 	while(window.isOpen()) // This is a loop for the program window to live in, each iter a frame
 	{
 		window.setFramerateLimit(60); // Limits framerate to 60
@@ -84,7 +86,7 @@ void splashScreen(sf::RenderWindow& window)
 			{
 				if (mainEvent.mouseButton.button == sf::Mouse::Left && Splash.getRingPos().contains(cursorPos))
 				{
-					clubListScreen(window);
+					//clubListScreen(window);
 					return;
 				}
 			}

@@ -1,8 +1,10 @@
 #include <string>
+#include "nlohmann/json.hpp"
+using nlohmann::json;
 
-class Club
+struct Club
 {
-public:
+    Club();
     Club(   std::string& name,
             std::string& description,
             std::string& president,
@@ -12,7 +14,8 @@ public:
     std::string getDescription();
     std::string getPresident();
     std::string getEmail();
+    void to_json(json&, const Club&);
+    void from_json(const json&, Club&);
 
-private:
     std::string name, description, president, email;
 };
