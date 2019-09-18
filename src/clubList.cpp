@@ -2,20 +2,19 @@
 #include <string>
 #include <iostream>
 #include <experimental/filesystem>
+#include "nlohmann/json.hpp"
 #include "clubList.h"
-
-namespace fs = std::experimental::filesystem;
 
 ClubList::ClubList(sf::RenderWindow& window)
 {
     sf::Vector2f screenSize = sf::Vector2f(window.getSize());
     this->create(screenSize.x, screenSize.y);
-    std::string tempDir = fs::current_path();
+    std::string tempDir = std::experimental::filesystem::current_path();
     tempDir += "/clubs";
 
-    this->cwd = fs::path(tempDir);\
+    this->cwd = std::experimental::filesystem::path(tempDir);\
 
-    for (auto file : fs::directory_iterator(this->cwd))
+    for (auto file : std::experimental::filesystem::directory_iterator(this->cwd))
     {
         std::string filePath = file.path().filename();
         filePath = "clubs/" + filePath;
@@ -27,13 +26,18 @@ ClubList::ClubList(sf::RenderWindow& window)
 
         inFile.close();
 
-        auto c = j.get<Club>();
+        std::string name = j["name"],
+                    description = j["description"],
+                    president = j["president"],
+                    email = j["email"];
+
+        Club c(name, description, president, email);
 
         this->clubs.push_back(c);
     }
 
     for (auto c : this->clubs)
     {
-        std::cout << c.getName() << " " << c.getEmail();
+        std::cout << c.getName() << " " << c.getEmail() << std::endl;
     }
 }

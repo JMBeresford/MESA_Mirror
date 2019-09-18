@@ -1,7 +1,7 @@
 #include <SFML/Graphics.hpp>
 #include <vector>
-#include "club.cpp"
-namespace fs = std::experimental::filesystem;
+#include <experimental/filesystem>
+#include "club.h"
 
 class ClubList : public sf::RenderTexture
 {
@@ -12,5 +12,5 @@ public:
 
 private:
     std::vector<Club> clubs;
-    fs::path cwd;
+    std::experimental::filesystem::path cwd;
 };

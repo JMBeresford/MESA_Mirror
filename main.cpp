@@ -1,8 +1,9 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
-#include "screen.cpp"
-#include "splashScreen.cpp"
-#include "clubList.cpp"
+#include <experimental/filesystem>
+#include "screen.h"
+#include "splashScreen.h"
+#include "clubList.h"
 namespace fs = std::experimental::filesystem;
 
 void splashScreen(sf::RenderWindow&);
@@ -86,7 +87,7 @@ void splashScreen(sf::RenderWindow& window)
 			{
 				if (mainEvent.mouseButton.button == sf::Mouse::Left && Splash.getRingPos().contains(cursorPos))
 				{
-					//clubListScreen(window);
+					clubListScreen(window);
 					return;
 				}
 			}
@@ -125,6 +126,7 @@ void clubListScreen(sf::RenderWindow& window)
 	sf::Vector2f cursorPos, screenSize(sf::Vector2f(window.getSize()));
 
 	sf::Event clubListEvent;
+	ClubList _Clublist(window);
 	while (window.isOpen())
 	{
 		cursorPos = sf::Vector2f(sf::Mouse::getPosition(window));
@@ -133,5 +135,6 @@ void clubListScreen(sf::RenderWindow& window)
 		{
 
 		}
+		break;
 	}
 }

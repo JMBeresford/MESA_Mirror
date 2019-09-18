@@ -1,6 +1,6 @@
 #include <SFML/Graphics.hpp>
 #include <vector>
-#include "animatedSprite.cpp"
+#include "animatedSprite.h"
 
 class Screen : public sf::RenderTexture
 {
