@@ -126,7 +126,7 @@ void clubListScreen(sf::RenderWindow& window)
 	sf::Vector2f cursorPos, screenSize(sf::Vector2f(window.getSize()));
 
 	sf::Event clubListEvent;
-	ClubList _Clublist(window);
+	ClubList CList(window);
 	while (window.isOpen())
 	{
 		cursorPos = sf::Vector2f(sf::Mouse::getPosition(window));
