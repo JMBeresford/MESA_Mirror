@@ -122,7 +122,7 @@ void splashScreen(sf::RenderWindow& window)
 
 void clubListScreen(sf::RenderWindow& window)
 {
-	Screen corners(window);
+	Screen Corners(window);
 	sf::Vector2f cursorPos, screenSize(sf::Vector2f(window.getSize()));
 
 	sf::Event clubListEvent;
@@ -135,6 +135,17 @@ void clubListScreen(sf::RenderWindow& window)
 		{
 
 		}
-		break;
+		
+	Corners.clear(sf::Color::Transparent);
+	Corners.animate();
+	Corners.drawCorners();
+	Corners.display();
+
+	sf::Sprite cornerTex(Corners.getTexture());
+
+	window.clear();
+	window.draw(cornerTex);
+	window.display();
 	}
+
 }
