@@ -53,8 +53,6 @@ ClubList::ClubList(sf::RenderWindow& window)
 
         this->names.emplace_back(temp);
     }
-
-    //for (auto i :)
 }
 
 void ClubList::setTextOriginToCenter(sf::Text& txt)
@@ -81,4 +79,9 @@ void ClubList::setSpriteOriginToCenter(sf::Sprite& spr)
 	sf::FloatRect bounds = spr.getLocalBounds();
 
 	spr.setOrigin(bounds.left + bounds.width / 2.0f, bounds.top + bounds.height / 2.0f);
+}
+
+Club ClubList::getClub(unsigned i)
+{
+    
 }
