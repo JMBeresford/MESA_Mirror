@@ -4,10 +4,13 @@
 #include "screen.h"
 #include "splashScreen.h"
 #include "clubList.h"
+#include "signUpForm.h"
+
 namespace fs = std::experimental::filesystem;
 
 void splashScreen(sf::RenderWindow&);
 void clubListScreen(sf::RenderWindow&);
+void signUpFormScreen(sf::RenderWindow&, Club&);
 
 int main()
 {
@@ -133,7 +136,11 @@ void clubListScreen(sf::RenderWindow& window)
 
 		while (window.pollEvent(clubListEvent))
 		{
-
+			if (clubListEvent.type == sf::Event::MouseButtonReleased)
+				if (clubListEvent.mouseButton.button == sf::Mouse::Left)
+					for (unsigned i = 0; i < CList.size(); i++)
+						if (CList.getTexts()[i].getLocalBounds().contains(cursorPos))
+							signUpFormScreen(window, CList.getClub(i));
 		}
 		
 		Corners.clear(sf::Color::Transparent);
@@ -154,4 +161,36 @@ void clubListScreen(sf::RenderWindow& window)
 		window.display();
 	}
 
+}
+
+void signUpFormScreen(sf::RenderWindow& window, Club& _club)
+{
+	Screen corners(window);
+	SignUpForm signUp(window, _club);
+
+	sf::Event signUpEvent;
+	while(window.isOpen())
+	{
+		while(window.pollEvent(signUpEvent))
+		{
+
+		}
+
+	corners.clear(sf::Color::Transparent);
+	corners.animate();
+	corners.drawCorners();
+	corners.display();
+
+	signUp.clear(sf::Color::Transparent);
+	signUp.drawElements();
+	signUp.display();
+
+	sf::Sprite cornerSpr(corners.getTexture());
+	sf::Sprite signUpSpr(signUp.getTexture());
+
+	window.clear();
+	window.draw(cornerSpr);
+	window.draw(signUpSpr);
+
+	}
 }

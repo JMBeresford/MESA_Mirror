@@ -9,11 +9,12 @@ class ClubList : public sf::RenderTexture
 {
 public:
     ClubList(sf::RenderWindow& window);
-    unsigned size();
+    unsigned size() {return this->clubs.size();}
     void setTextOriginToCenter(sf::Text&);
     void setSpriteOriginToCenter(sf::Sprite&);
-    Club getClub(unsigned);
+    Club& getClub(unsigned i);
     void drawClubs();
+    std::vector<sf::Text> getTexts();
 
 private:
     sf::Font fnt;

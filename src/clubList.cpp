@@ -92,7 +92,7 @@ void ClubList::setSpriteOriginToCenter(sf::Sprite& spr)
 	spr.setOrigin(bounds.left + bounds.width / 2.0f, bounds.top + bounds.height / 2.0f);
 }
 
-Club ClubList::getClub(unsigned i)
+Club& ClubList::getClub(unsigned i)
 {
     return this->clubs[i];
 }
@@ -101,4 +101,9 @@ void ClubList::drawClubs()
 {
     for (auto i : this->names)
         this->draw(i);
+}
+
+std::vector<sf::Text> ClubList::getTexts()
+{
+    return this->names;
 }
