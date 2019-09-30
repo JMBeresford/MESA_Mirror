@@ -8,6 +8,7 @@
 ClubList::ClubList(sf::RenderWindow& window)
 {
     sf::Vector2f screenSize = sf::Vector2f(window.getSize());
+    this->margin = sf::Vector2f(screenSize.x / 15, screenSize.y / 15);
     this->fnt.loadFromFile("assets/bladeRunner.ttf");
     this->create(screenSize.x, screenSize.y);
     std::string tempDir = std::experimental::filesystem::current_path();
@@ -37,7 +38,7 @@ ClubList::ClubList(sf::RenderWindow& window)
         this->clubs.emplace_back(c);
     }
 
-    this->margin = sf::Vector2f(screenSize.x / 15, screenSize.y / 15);
+    
     this->grid.x = 2;
     this->grid.y = this->clubs.size() / 2 + 1;
     this->cellSize.x = (screenSize.x - this->margin.x * 2) / this->grid.x;
@@ -53,6 +54,16 @@ ClubList::ClubList(sf::RenderWindow& window)
 
         this->names.emplace_back(temp);
     }
+
+    // The following is a lazy workaround for positioning the text
+    // TODO: Fix this to be responsive to size of names vector
+    this->names[0].setPosition(sf::Vector2f(
+        screenSize.x/4 + this->margin.x, screenSize.y/2
+    ));
+
+    this->names[1].setPosition(sf::Vector2f(
+        3*screenSize.x/4 - this->margin.x, screenSize.y/2
+    ));
 }
 
 void ClubList::setTextOriginToCenter(sf::Text& txt)
@@ -83,5 +94,11 @@ void ClubList::setSpriteOriginToCenter(sf::Sprite& spr)
 
 Club ClubList::getClub(unsigned i)
 {
-    
+    return this->clubs[i];
+}
+
+void ClubList::drawClubs()
+{
+    for (auto i : this->names)
+        this->draw(i);
 }

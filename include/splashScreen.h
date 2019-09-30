@@ -1,3 +1,5 @@
+#ifndef SPLASHSCREEN_H
+#define SPLASHSCREEN_H
 #include <SFML/Graphics.hpp>
 
 class SplashScreen : public sf::RenderTexture
@@ -19,3 +21,4 @@ private:
     sf::Sprite ring, shadow;
     sf::Text mesaText, enterText, timeText;
 };
+#endif

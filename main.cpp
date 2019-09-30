@@ -136,16 +136,22 @@ void clubListScreen(sf::RenderWindow& window)
 
 		}
 		
-	Corners.clear(sf::Color::Transparent);
-	Corners.animate();
-	Corners.drawCorners();
-	Corners.display();
+		Corners.clear(sf::Color::Transparent);
+		Corners.animate();
+		Corners.drawCorners();
+		Corners.display();
 
-	sf::Sprite cornerTex(Corners.getTexture());
+		CList.clear(sf::Color::Transparent);
+		CList.drawClubs();
+		CList.display();
 
-	window.clear();
-	window.draw(cornerTex);
-	window.display();
+		sf::Sprite cornerTex(Corners.getTexture());
+		sf::Sprite clubsTex(CList.getTexture());
+
+		window.clear();
+		window.draw(cornerTex);
+		window.draw(clubsTex);
+		window.display();
 	}
 
 }

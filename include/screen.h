@@ -1,3 +1,5 @@
+#ifndef SCREEN_H
+#define SCREEN_H
 #include <SFML/Graphics.hpp>
 #include <vector>
 #include "animatedSprite.h"
@@ -16,3 +18,4 @@ private:
     std::vector<AnimatedSprite> cornerSprites;
     sf::Vector2f screenSize, margin;
 };
+#endif

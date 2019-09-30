@@ -1,3 +1,5 @@
+#ifndef ANIMATEDSPRITE_H
+#define ANIMATEDSPRITE_H
 #include <SFML/Graphics.hpp>
 
 class AnimatedSprite: public sf::Sprite
@@ -12,3 +14,4 @@ private:
 	unsigned index; // used to index the above array
 	sf::Clock timer; // used for the interval
 };
+#endif

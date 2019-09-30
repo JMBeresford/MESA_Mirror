@@ -1,3 +1,5 @@
+#ifndef CLUBLIST_H
+#define CLUBLIST_H
 #include <SFML/Graphics.hpp>
 #include <vector>
 #include <experimental/filesystem>
@@ -20,3 +22,4 @@ private:
     std::vector<sf::Text> names;
     std::experimental::filesystem::path cwd;
 };
+#endif
