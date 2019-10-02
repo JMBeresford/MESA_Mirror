@@ -10,9 +10,13 @@ class SignUpForm : public sf::RenderTexture
 public:
     SignUpForm(sf::RenderWindow&,Club&);
     void drawElements();
+    std::vector<sf::FloatRect> clickables;
+    sf::RectangleShape submit;
 
     void setTextOriginToCenter(sf::Text&);
-    void setSpriteOriginToCenter(sf::Sprite&);
+    void setSpriteOriginToCenter(sf::RectangleShape&);
+    void activateText(unsigned);
+    void deactivate();
 
     struct textBox : public sf::RectangleShape
     {
@@ -21,13 +25,13 @@ public:
         bool active;
         std::string str;
     };
+    std::vector<textBox> textBoxes;
 
 private:
     Club _club;
+    sf::Font fnt;
     std::string fName, lName, email, phone;
-    std::vector<sf::Text> texts;
+    sf::Text name, description, firstName, lastName, _email, _phone, submitText;
     std::vector<sf::RectangleShape> hDivs;
-    std::vector<textBox> textBoxes;
-    std::vector<sf::FloatRect> clickables;
 };
 #endif

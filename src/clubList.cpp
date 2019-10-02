@@ -52,7 +52,7 @@ ClubList::ClubList(sf::RenderWindow& window)
         temp.setPosition(sf::Vector2f(  this->margin.x/this->grid.x + screenSize.x/this->grid.x * (i%int(grid.x) + 1),
                                         this->margin.y/this->grid.y + screenSize.y/this->grid.y * (i / grid.x)));
 
-        this->names.emplace_back(temp);
+        this->names.push_back(temp);
     }
 
     // The following is a lazy workaround for positioning the text

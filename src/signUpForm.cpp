@@ -3,52 +3,110 @@
 
 SignUpForm::SignUpForm(sf::RenderWindow& window, Club& _club)
 {
-    sf::Font fnt;
-    fnt.loadFromFile("assets/bladeRunner.ttf");
+    // TODO: redo this entire mess
+    this->fnt.loadFromFile("assets/font.ttf");
     
     sf::Vector2f    screenSize = sf::Vector2f(window.getSize()),
-                    margin = sf::Vector2f(screenSize.x/15,screenSize.y/15);
+                    margin = sf::Vector2f(screenSize.x/10,screenSize.y/10);
+
+    this->create(screenSize.x, screenSize.y);
 
     this->_club = _club;
 
-    this->texts.push_back(sf::Text(this->_club.name, fnt, 45));
+    this->name = (sf::Text(_club.getName(), this->fnt, 45));
 
-    this->texts.push_back(sf::Text(this->_club.description, fnt, 30));
+    this->description = (sf::Text(_club.getDescription(), this->fnt, 35));
 
-    this->texts.push_back(sf::Text("First Name:",fnt,25));
+    this->firstName = (sf::Text("First Name:",this->fnt,25));
 
-    this->texts.push_back(sf::Text("Last Name:",fnt,25));
+    this->lastName = (sf::Text("Last Name:",this->fnt,25));
 
-    this->texts.push_back(sf::Text("    Email:",fnt,25));
+    this->_email = (sf::Text("    Email:",this->fnt,25));
 
-    this->texts.push_back(sf::Text("    Phone:",fnt,25));
+    this->_phone = (sf::Text("    Phone:",this->fnt,25));
 
+    for (size_t i = 0; i < 4; i++)
+    {
+        textBox temp;
+        this->setSpriteOriginToCenter(temp);
+        temp.setFillColor(sf::Color::White);
+        temp.setSize(sf::Vector2f(  this->_email.getLocalBounds().width*4,
+                                    this->_email.getLocalBounds().height*1.5));
 
-    for (auto i : this->texts)
-        this->setTextOriginToCenter(i);
+        temp.setPosition(sf::Vector2f(  screenSize.x/5 + _email.getLocalBounds().width,
+                                        screenSize.y/2 + (this->firstName.getLocalBounds().height * 3 * i)));
+        this->textBoxes.emplace_back(temp);
+    }
 
-    this->texts[0].setPosition(screenSize.x/2, margin.y);
+    this->setTextOriginToCenter(this->name);
+    this->setTextOriginToCenter(this->description);
+    this->setTextOriginToCenter(this->firstName);
+    this->setTextOriginToCenter(this->lastName);
+    this->setTextOriginToCenter(this->_email);
+    this->setTextOriginToCenter(this->_phone);
 
-    sf::FloatRect textSize = this->texts[0].getLocalBounds();
+    this->name.setFillColor(sf::Color::White);
+    this->description.setFillColor(sf::Color::White);
+    this->firstName.setFillColor(sf::Color::White);
+    this->lastName.setFillColor(sf::Color::White);
+    this->_email.setFillColor(sf::Color::White);
+    this->_phone.setFillColor(sf::Color::White);
 
-    this->texts[1].setPosition(screenSize.x/2, margin.y + textSize.height * 1.5);
+    this->name.setPosition(screenSize.x/2, margin.y);
 
-    this->texts[2].setPosition(screenSize.x/4, screenSize.y/2);
+    sf::FloatRect textSize = this->name.getLocalBounds();
 
-    textSize = this->texts[2].getLocalBounds();
+    this->description.setPosition(screenSize.x/2, margin.y + textSize.height * 3);
 
-    this->texts[3].setPosition(screenSize.x/4, screenSize.y/2 + textSize.height * 1.5);
+    this->firstName.setPosition(screenSize.x/5, screenSize.y/2);
 
-    this->texts[4].setPosition(screenSize.x/4, screenSize.y + textSize.height * 3);
+    textSize = this->firstName.getLocalBounds();
+
+    this->lastName.setPosition(screenSize.x/5, screenSize.y/2 + textSize.height * 3);
+
+    this->_email.setPosition(screenSize.x/5, screenSize.y/2 + textSize.height * 6);
+
+    this->_phone.setPosition(screenSize.x/5, screenSize.y/2 + textSize.height * 9);
+
+    this->submit.setSize(sf::Vector2f(screenSize.x/5,screenSize.y/10));
+    this->submit.setFillColor(sf::Color::White);
+    this->setSpriteOriginToCenter(this->submit);
+    this->submit.setPosition(screenSize.x/2, 8*screenSize.y/10);
+
+    this->submitText.setFont(this->fnt);
+    this->submitText.setString("SUBMIT");
+    this->submitText.setFillColor(sf::Color::Black);
+    this->setTextOriginToCenter(this->submitText);
+    this->submitText.setPosition(screenSize.x/2, 8*screenSize.y/10);
+
+    for (auto i : this->textBoxes)
+        this->clickables.push_back(i.getGlobalBounds());
 }
 
 void SignUpForm::drawElements()
 {
-    for (auto i : this->texts)
-        this->draw(i);
-
+    this->draw(this->name);
+    this->draw(this->description);
+    this->draw(this->firstName);
+    this->draw(this->lastName);
+    this->draw(this->_email);
+    this->draw(this->_phone);
+    this->draw(this->submit);
+    this->draw(this->submitText);
+    
     for (auto i : this->textBoxes)
         this->draw(i);
+}
+
+void SignUpForm::activateText(unsigned i)
+{
+    this->textBoxes[i].active = !this->textBoxes[i].active;
+}
+
+void SignUpForm::deactivate()
+{
+    for (auto i : this->textBoxes)
+        i.active = false;
 }
 
 void SignUpForm::setTextOriginToCenter(sf::Text& txt)
@@ -64,7 +122,7 @@ void SignUpForm::setTextOriginToCenter(sf::Text& txt)
 	txt.setOrigin(bounds.left + bounds.width / 2.0f, bounds.top + bounds.height / 2.0f);
 }
 
-void SignUpForm::setSpriteOriginToCenter(sf::Sprite& spr)
+void SignUpForm::setSpriteOriginToCenter(sf::RectangleShape& spr)
 {
 	/* In SFML, objects have an origin that act as the center of all transformations, such as
 	 * rotation and position. The default value is the top left corner of said object

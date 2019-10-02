@@ -1,10 +1,13 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include <experimental/filesystem>
+#include <fstream>
+#include "nlohmann/json.hpp"
 #include "screen.h"
 #include "splashScreen.h"
 #include "clubList.h"
 #include "signUpForm.h"
+using nlohmann::json;
 
 namespace fs = std::experimental::filesystem;
 
@@ -90,7 +93,13 @@ void splashScreen(sf::RenderWindow& window)
 			{
 				if (mainEvent.mouseButton.button == sf::Mouse::Left && Splash.getRingPos().contains(cursorPos))
 				{
-					clubListScreen(window);
+					// Temp workaround for club rush
+					std::string name = "Computer Science Club",
+								description = "The CODCS Club is a community for COD \nstudents to gather to collaborate\nwith their peers and learn\nabout computer science!",
+								email = "president@codcs.club",
+								president = "Christian 'Chrispy' Carteno";
+					Club _club(name,description,president,email);
+					signUpFormScreen(window, _club);
 					return;
 				}
 			}
@@ -130,17 +139,18 @@ void clubListScreen(sf::RenderWindow& window)
 
 	sf::Event clubListEvent;
 	ClubList CList(window);
+	std::vector<sf::Text> _text = CList.getTexts();
 	while (window.isOpen())
 	{
 		cursorPos = sf::Vector2f(sf::Mouse::getPosition(window));
 
 		while (window.pollEvent(clubListEvent))
 		{
-			if (clubListEvent.type == sf::Event::MouseButtonReleased)
-				if (clubListEvent.mouseButton.button == sf::Mouse::Left)
-					for (unsigned i = 0; i < CList.size(); i++)
-						if (CList.getTexts()[i].getLocalBounds().contains(cursorPos))
-							signUpFormScreen(window, CList.getClub(i));
+			//if (clubListEvent.type == sf::Event::MouseButtonPressed)
+			//	if (clubListEvent.mouseButton.button == sf::Mouse::Left)
+			//		for (auto i : _text)
+			//			if (i.getLocalBounds().contains(cursorPos))
+			//				signUpFormScreen(window, CList.getClub(i));
 		}
 		
 		Corners.clear(sf::Color::Transparent);
@@ -165,32 +175,126 @@ void clubListScreen(sf::RenderWindow& window)
 
 void signUpFormScreen(sf::RenderWindow& window, Club& _club)
 {
+	sf::Vector2f screenSize = sf::Vector2f(window.getSize());
+	sf::Font font;
+	font.loadFromFile("assets/font.ttf");
 	Screen corners(window);
 	SignUpForm signUp(window, _club);
-
+	sf::Vector2i cursorPos;
 	sf::Event signUpEvent;
+	std::vector<sf::Text> _texts(4);
+	bool typing = false;
+	int selection = 0;
+
+	sf::FloatRect pos = signUp.submit.getGlobalBounds();
+
+	for (size_t i = 0; i < _texts.size(); i++)
+	{
+		signUp.setTextOriginToCenter(_texts[i]);
+		_texts[i].setFont(font);
+		_texts[i].setCharacterSize(25);
+		_texts[i].setPosition(signUp.textBoxes[i].getPosition().x, signUp.textBoxes[i].getPosition().y - 5);
+		_texts[i].setFillColor(sf::Color::Black);
+	}
+
 	while(window.isOpen())
 	{
 		while(window.pollEvent(signUpEvent))
 		{
+			if (signUpEvent.type == sf::Event::MouseButtonPressed)
+			{
+				cursorPos = sf::Mouse::getPosition(window);
+				std::cout << "clicked" << std::endl;
+				if (signUpEvent.mouseButton.button == sf::Mouse::Left)
+				{
+					if (signUp.textBoxes[0].getGlobalBounds().contains(cursorPos.x, cursorPos.y))
+					{
+						signUp.activateText(0);
+						typing = true;
+						selection = 0;
+						std::cout << "clicked box" << std::endl;
+					}
+					else if (signUp.textBoxes[1].getGlobalBounds().contains(cursorPos.x, cursorPos.y))
+					{
+						signUp.activateText(1);
+						typing = true;
+						selection = 1;
+						std::cout << "clicked box" << std::endl;
+					}
+					else if (signUp.textBoxes[2].getGlobalBounds().contains(cursorPos.x, cursorPos.y))
+					{
+						signUp.activateText(2);
+						typing = true;
+						selection = 2;
+						std::cout << "clicked box" << std::endl;
+					}
+					else if (signUp.textBoxes[3].getGlobalBounds().contains(cursorPos.x, cursorPos.y))
+					{
+						signUp.activateText(3);
+						typing = true;
+						selection = 3;
+						std::cout << "clicked box" << std::endl;
+					}
+					else if (pos.contains(cursorPos.x, cursorPos.y))
+					{
+						Member m(	signUp.textBoxes[0].str,signUp.textBoxes[1].str,
+									signUp.textBoxes[2].str,signUp.textBoxes[3].str);
+						std::ofstream ofile;
+						ofile.open(signUp.textBoxes[0].str + "_" + signUp.textBoxes[1].str + ".json");
 
+						ofile << m.dump();
+						ofile.close();
+						return;
+					}
+					else
+					{
+						signUp.deactivate();
+						typing = false;
+					}
+				}
+			}
+		
+			if (signUpEvent.type == sf::Event::TextEntered && typing)
+			{
+				if (signUpEvent.text.unicode < 128 && signUpEvent.text.unicode > 31)
+				{
+					std::cout << "typing..." << std::endl;
+					
+					if (signUp.textBoxes[selection].active)
+					{
+						std::cout << "typed" << std::endl;
+						signUp.textBoxes[selection].str += static_cast<char>(signUpEvent.text.unicode);
+						_texts[selection].setString(signUp.textBoxes[selection].str);
+					}
+				}
+				if (signUpEvent.text.unicode == 8 && typing)
+				{
+					if (signUp.textBoxes[selection].active)
+					{
+						signUp.textBoxes[selection].str.pop_back();
+						_texts[selection].setString(signUp.textBoxes[selection].str);
+					}
+				}
+			}
 		}
 
-	corners.clear(sf::Color::Transparent);
-	corners.animate();
-	corners.drawCorners();
-	corners.display();
+		corners.clear(sf::Color::Transparent);
+		corners.animate();
+		corners.drawCorners();
+		corners.display();
 
-	signUp.clear(sf::Color::Transparent);
-	signUp.drawElements();
-	signUp.display();
+		signUp.clear(sf::Color::Transparent);
+		signUp.drawElements();
+		signUp.display();
 
-	sf::Sprite cornerSpr(corners.getTexture());
-	sf::Sprite signUpSpr(signUp.getTexture());
+		sf::Sprite cornerSpr(corners.getTexture());
+		sf::Sprite signUpSpr(signUp.getTexture());
 
-	window.clear();
-	window.draw(cornerSpr);
-	window.draw(signUpSpr);
-
+		window.clear();
+		window.draw(cornerSpr);
+		window.draw(signUpSpr);
+		for (auto i : _texts)
+			window.draw(i);
+		window.display();
 	}
 }
