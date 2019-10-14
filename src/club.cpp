@@ -1,4 +1,5 @@
 #include "club.h"
+#include <SFML/Graphics.hpp>
 #include "nlohmann/json.hpp"
 using nlohmann::json;
 
@@ -35,6 +36,35 @@ std::string Club::getPresident()
 std::string Club::getEmail()
 {
     return this->email;
+}
+
+std::string Club::fmtDescription(sf::RenderWindow& window, std::string s)
+{
+    int charLimit = (window.getSize().x) / 25;
+    int lines = s.size()/charLimit;
+    std::string temp = "";
+
+    if (s.size() < charLimit)
+        return s;
+    else
+    {
+        bool newLine = 0;
+        for (size_t i = 0; i < s.size(); i++)
+        {
+            if (i % charLimit == 0 && i != 0)
+                newLine = 1;
+
+            if (newLine == 1 && s[i-1] == ' ')
+            {
+                temp += '\n';
+                temp += s[i];
+                newLine = 0;
+            }
+            else
+                temp += s[i];
+        }
+        return temp;
+    }
 }
 
 void to_json(json& j, const Club& c)

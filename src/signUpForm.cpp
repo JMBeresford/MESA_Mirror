@@ -13,9 +13,11 @@ SignUpForm::SignUpForm(sf::RenderWindow& window, Club& _club)
 
     this->_club = _club;
 
+    std::string fmtdDesc = _club.fmtDescription(window,_club.getDescription());
+
     this->name = (sf::Text(_club.getName(), this->fnt, 45));
 
-    this->description = (sf::Text(_club.getDescription(), this->fnt, 35));
+    this->description = (sf::Text(fmtdDesc, this->fnt, 25));
 
     this->firstName = (sf::Text("First Name:",this->fnt,25));
 
@@ -29,7 +31,7 @@ SignUpForm::SignUpForm(sf::RenderWindow& window, Club& _club)
     {
         textBox temp;
         this->setSpriteOriginToCenter(temp);
-        temp.setFillColor(sf::Color::White);
+        temp.setFillColor(sf::Color(200,200,200,255));
         temp.setSize(sf::Vector2f(  this->_email.getLocalBounds().width*4,
                                     this->_email.getLocalBounds().height*1.5));
 
@@ -56,7 +58,8 @@ SignUpForm::SignUpForm(sf::RenderWindow& window, Club& _club)
 
     sf::FloatRect textSize = this->name.getLocalBounds();
 
-    this->description.setPosition(screenSize.x/2, margin.y + textSize.height * 3);
+    this->description.setPosition(screenSize.x/2, this->description.getLocalBounds().height/2
+                                                + margin.y + textSize.height * 3);
 
     this->firstName.setPosition(screenSize.x/5, screenSize.y/2);
 
@@ -80,7 +83,7 @@ SignUpForm::SignUpForm(sf::RenderWindow& window, Club& _club)
     this->submitText.setPosition(screenSize.x/2, 8*screenSize.y/10);
 
     for (auto i : this->textBoxes)
-        this->clickables.push_back(i.getGlobalBounds());
+        this->clickables.push_back(i);
 }
 
 void SignUpForm::drawElements()
@@ -95,18 +98,25 @@ void SignUpForm::drawElements()
     this->draw(this->submitText);
     
     for (auto i : this->textBoxes)
+    {
         this->draw(i);
+        this->draw(i.cursor);
+    }
 }
 
 void SignUpForm::activateText(unsigned i)
 {
-    this->textBoxes[i].active = !this->textBoxes[i].active;
+    this->textBoxes[i].active = true;
+    this->textBoxes[i].setFillColor(sf::Color::White);
 }
 
 void SignUpForm::deactivate()
 {
     for (auto i : this->textBoxes)
+    {
         i.active = false;
+        i.setFillColor(sf::Color(200,200,200,255));
+    }
 }
 
 void SignUpForm::setTextOriginToCenter(sf::Text& txt)

@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 #include "member.h"
+#include <SFML/Graphics.hpp>
 #include "nlohmann/json.hpp"
 using nlohmann::json;
 
@@ -18,6 +19,7 @@ struct Club
     std::string getDescription();
     std::string getPresident();
     std::string getEmail();
+    std::string fmtDescription(sf::RenderWindow&,std::string);
     void to_json(json&, const Club&);
     void from_json(const json&, Club&);
 

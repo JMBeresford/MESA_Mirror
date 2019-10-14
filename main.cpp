@@ -93,13 +93,7 @@ void splashScreen(sf::RenderWindow& window)
 			{
 				if (mainEvent.mouseButton.button == sf::Mouse::Left && Splash.getRingPos().contains(cursorPos))
 				{
-					// Temp workaround for club rush
-					std::string name = "Computer Science Club",
-								description = "The CODCS Club is a community for COD \nstudents to gather to collaborate\nwith their peers and learn\nabout computer science!",
-								email = "president@codcs.club",
-								president = "Christian 'Chrispy' Carteno";
-					Club _club(name,description,president,email);
-					signUpFormScreen(window, _club);
+					clubListScreen(window);
 					return;
 				}
 			}
@@ -146,11 +140,11 @@ void clubListScreen(sf::RenderWindow& window)
 
 		while (window.pollEvent(clubListEvent))
 		{
-			//if (clubListEvent.type == sf::Event::MouseButtonPressed)
-			//	if (clubListEvent.mouseButton.button == sf::Mouse::Left)
-			//		for (auto i : _text)
-			//			if (i.getLocalBounds().contains(cursorPos))
-			//				signUpFormScreen(window, CList.getClub(i));
+			if (clubListEvent.type == sf::Event::MouseButtonPressed)
+				if (clubListEvent.mouseButton.button == sf::Mouse::Left)
+					for (size_t i = 0; i < _text.size(); i++)
+						if (_text[i].getGlobalBounds().contains(cursorPos))
+							signUpFormScreen(window, CList.getClub(i));
 		}
 		
 		Corners.clear(sf::Color::Transparent);
@@ -199,11 +193,11 @@ void signUpFormScreen(sf::RenderWindow& window, Club& _club)
 
 	while(window.isOpen())
 	{
+		cursorPos = sf::Mouse::getPosition(window);
 		while(window.pollEvent(signUpEvent))
 		{
 			if (signUpEvent.type == sf::Event::MouseButtonPressed)
 			{
-				cursorPos = sf::Mouse::getPosition(window);
 				std::cout << "clicked" << std::endl;
 				if (signUpEvent.mouseButton.button == sf::Mouse::Left)
 				{
@@ -265,11 +259,14 @@ void signUpFormScreen(sf::RenderWindow& window, Club& _club)
 						std::cout << "typed" << std::endl;
 						signUp.textBoxes[selection].str += static_cast<char>(signUpEvent.text.unicode);
 						_texts[selection].setString(signUp.textBoxes[selection].str);
+						signUp.textBoxes[selection].cursor.setPosition(
+							_texts[selection].getGlobalBounds().left + _texts[selection].getGlobalBounds().width,
+							_texts[selection].getGlobalBounds().top + _texts[selection].getGlobalBounds().height / 2);
 					}
 				}
 				if (signUpEvent.text.unicode == 8 && typing)
 				{
-					if (signUp.textBoxes[selection].active)
+					if (signUp.textBoxes[selection].active && !signUp.textBoxes[selection].str.empty())
 					{
 						signUp.textBoxes[selection].str.pop_back();
 						_texts[selection].setString(signUp.textBoxes[selection].str);
