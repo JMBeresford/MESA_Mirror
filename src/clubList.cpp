@@ -8,8 +8,9 @@
 ClubList::ClubList(sf::RenderWindow& window)
 {
     sf::Vector2f screenSize = sf::Vector2f(window.getSize());
-    this->margin = sf::Vector2f(screenSize.x / 15, screenSize.y / 15);
-    this->fnt.loadFromFile("assets/bladeRunner.ttf");
+    this->margin = sf::Vector2f(screenSize.x / 18, screenSize.y / 18);
+    sf::Vector2f usableScreen(screenSize.x - 2 * margin.x, screenSize.y - 2 * margin.y);
+    this->fnt.loadFromFile("assets/font.ttf");
     this->create(screenSize.x, screenSize.y);
     std::string tempDir = std::experimental::filesystem::current_path();
     tempDir += "/clubs";
@@ -40,30 +41,54 @@ ClubList::ClubList(sf::RenderWindow& window)
 
     
     this->grid.x = 2;
-    this->grid.y = this->clubs.size() / 2 + 1;
-    this->cellSize.x = (screenSize.x - this->margin.x * 2) / this->grid.x;
-    this->cellSize.y = (screenSize.y - this->margin.y * 2) / this->grid.y;
+    if (this->clubs.size() % 2 == 0)
+        this->grid.y = this->clubs.size() / 2;
+    else
+        this->grid.y = (this->clubs.size() + 1) / 2;
+
+    this->cellSize.x = usableScreen.x/this->grid.x;
+    this->cellSize.y = usableScreen.y/this->grid.y;
+
+    for (size_t i = 0; i < this->grid.y; i++)
+    {
+        sf::FloatRect temp1(
+            sf::Vector2f(margin.x,margin.y + (usableScreen.y/this->grid.y) * i),
+            cellSize);
+
+        sf::FloatRect temp2(
+            sf::Vector2f(margin.x + usableScreen.x/2,margin.y + (usableScreen.y/this->grid.y) * i),
+            cellSize);
+
+        
+
+        this->cells.push_back(temp1);
+        this->cells.push_back(temp2);
+    }
 
     for (size_t i = 0; i < this->clubs.size(); i++)
     {
         sf::Text temp(this->clubs[i].getName(),fnt,30);
+        temp.setStyle(sf::Text::Bold);
         this->setTextOriginToCenter(temp);
-        sf::FloatRect textSize(temp.getLocalBounds());
-        temp.setPosition(sf::Vector2f(  this->margin.x/this->grid.x + screenSize.x/this->grid.x * (i%int(grid.x) + 1),
-                                        this->margin.y/this->grid.y + screenSize.y/this->grid.y * (i / grid.x)));
+        temp.setPosition(sf::Vector2f(
+            this->cells[i].left + this->cells[i].width/2,
+            this->cells[i].top + this->cells[i].height/2
+        ));
 
         this->names.push_back(temp);
     }
+}
 
-    // The following is a lazy workaround for positioning the text
-    // TODO: Fix this to be responsive to size of names vector
-    this->names[0].setPosition(sf::Vector2f(
-        screenSize.x/4 + this->margin.x, screenSize.y/2
-    ));
-
-    this->names[1].setPosition(sf::Vector2f(
-        3*screenSize.x/4 - this->margin.x, screenSize.y/2
-    ));
+bool ClubList::hovering(sf::Vector2f mousePos)
+{
+    auto texts = this->getTexts();
+    for (auto i : texts)
+    {
+        if (i.getGlobalBounds().contains(mousePos))
+            return true;
+    }
+    
+    return false;
 }
 
 void ClubList::setTextOriginToCenter(sf::Text& txt)

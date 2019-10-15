@@ -134,9 +134,22 @@ void clubListScreen(sf::RenderWindow& window)
 	sf::Event clubListEvent;
 	ClubList CList(window);
 	std::vector<sf::Text> _text = CList.getTexts();
+	sf::Cursor cur;
+
 	while (window.isOpen())
 	{
 		cursorPos = sf::Vector2f(sf::Mouse::getPosition(window));
+
+		if (CList.hovering(cursorPos))
+		{
+			cur.loadFromSystem(sf::Cursor::Hand);
+			window.setMouseCursor(cur);
+		}
+		else
+		{
+			cur.loadFromSystem(sf::Cursor::Arrow);
+			window.setMouseCursor(cur);
+		}
 
 		while (window.pollEvent(clubListEvent))
 		{
@@ -176,6 +189,7 @@ void signUpFormScreen(sf::RenderWindow& window, Club& _club)
 	SignUpForm signUp(window, _club);
 	sf::Vector2i cursorPos;
 	sf::Event signUpEvent;
+	sf::Cursor cur;
 	std::vector<sf::Text> _texts(4);
 	bool typing = false;
 	int selection = 0;
@@ -194,10 +208,27 @@ void signUpFormScreen(sf::RenderWindow& window, Club& _club)
 	while(window.isOpen())
 	{
 		cursorPos = sf::Mouse::getPosition(window);
+		if (pos.contains(cursorPos.x,cursorPos.y))
+			signUp.submit.setFillColor(sf::Color::White);
+		else
+			signUp.submit.setFillColor(sf::Color(150,150,150,255));
+
+		if (signUp.hovering(sf::Vector2f(cursorPos)))
+		{
+			cur.loadFromSystem(sf::Cursor::Hand);
+			window.setMouseCursor(cur);
+		}
+		else
+		{
+			cur.loadFromSystem(sf::Cursor::Arrow);
+			window.setMouseCursor(cur);
+		}
+		
 		while(window.pollEvent(signUpEvent))
 		{
 			if (signUpEvent.type == sf::Event::MouseButtonPressed)
 			{
+				cursorPos = sf::Mouse::getPosition(window);
 				std::cout << "clicked" << std::endl;
 				if (signUpEvent.mouseButton.button == sf::Mouse::Left)
 				{
@@ -206,28 +237,28 @@ void signUpFormScreen(sf::RenderWindow& window, Club& _club)
 						signUp.activateText(0);
 						typing = true;
 						selection = 0;
-						std::cout << "clicked box" << std::endl;
+						std::cout << "clicked box 0" << std::endl;
 					}
 					else if (signUp.textBoxes[1].getGlobalBounds().contains(cursorPos.x, cursorPos.y))
 					{
 						signUp.activateText(1);
 						typing = true;
 						selection = 1;
-						std::cout << "clicked box" << std::endl;
+						std::cout << "clicked box 1" << std::endl;
 					}
 					else if (signUp.textBoxes[2].getGlobalBounds().contains(cursorPos.x, cursorPos.y))
 					{
 						signUp.activateText(2);
 						typing = true;
 						selection = 2;
-						std::cout << "clicked box" << std::endl;
+						std::cout << "clicked box 2" << std::endl;
 					}
 					else if (signUp.textBoxes[3].getGlobalBounds().contains(cursorPos.x, cursorPos.y))
 					{
 						signUp.activateText(3);
 						typing = true;
 						selection = 3;
-						std::cout << "clicked box" << std::endl;
+						std::cout << "clicked box 3" << std::endl;
 					}
 					else if (pos.contains(cursorPos.x, cursorPos.y))
 					{
@@ -259,10 +290,7 @@ void signUpFormScreen(sf::RenderWindow& window, Club& _club)
 						std::cout << "typed" << std::endl;
 						signUp.textBoxes[selection].str += static_cast<char>(signUpEvent.text.unicode);
 						_texts[selection].setString(signUp.textBoxes[selection].str);
-						signUp.textBoxes[selection].cursor.setPosition(
-							_texts[selection].getGlobalBounds().left + _texts[selection].getGlobalBounds().width,
-							_texts[selection].getGlobalBounds().top + _texts[selection].getGlobalBounds().height / 2);
-					}
+						}
 				}
 				if (signUpEvent.text.unicode == 8 && typing)
 				{
@@ -271,6 +299,14 @@ void signUpFormScreen(sf::RenderWindow& window, Club& _club)
 						signUp.textBoxes[selection].str.pop_back();
 						_texts[selection].setString(signUp.textBoxes[selection].str);
 					}
+				}
+				if (signUpEvent.text.unicode == 9 && typing)
+				{
+					selection++;
+					if (selection > 3)
+						selection = 0;
+
+					signUp.activateText(selection);
 				}
 			}
 		}
@@ -287,7 +323,7 @@ void signUpFormScreen(sf::RenderWindow& window, Club& _club)
 		sf::Sprite cornerSpr(corners.getTexture());
 		sf::Sprite signUpSpr(signUp.getTexture());
 
-		window.clear();
+		window.clear(sf::Color::Transparent);
 		window.draw(cornerSpr);
 		window.draw(signUpSpr);
 		for (auto i : _texts)

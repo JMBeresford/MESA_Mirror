@@ -31,7 +31,7 @@ SignUpForm::SignUpForm(sf::RenderWindow& window, Club& _club)
     {
         textBox temp;
         this->setSpriteOriginToCenter(temp);
-        temp.setFillColor(sf::Color(200,200,200,255));
+        temp.setFillColor(sf::Color(150,150,150,255));
         temp.setSize(sf::Vector2f(  this->_email.getLocalBounds().width*4,
                                     this->_email.getLocalBounds().height*1.5));
 
@@ -83,7 +83,9 @@ SignUpForm::SignUpForm(sf::RenderWindow& window, Club& _club)
     this->submitText.setPosition(screenSize.x/2, 8*screenSize.y/10);
 
     for (auto i : this->textBoxes)
-        this->clickables.push_back(i);
+        this->clickables.push_back(i.getGlobalBounds());
+
+    this->clickables.push_back(this->submit.getGlobalBounds());
 }
 
 void SignUpForm::drawElements()
@@ -100,14 +102,21 @@ void SignUpForm::drawElements()
     for (auto i : this->textBoxes)
     {
         this->draw(i);
-        this->draw(i.cursor);
     }
 }
 
 void SignUpForm::activateText(unsigned i)
 {
-    this->textBoxes[i].active = true;
-    this->textBoxes[i].setFillColor(sf::Color::White);
+    for (size_t j = 0; j < this->textBoxes.size(); j++)
+    {
+        if (j == i)
+            {
+            this->textBoxes[j].setFillColor(sf::Color::White);
+            this->textBoxes[j].active = true;
+            }
+        else
+            this->textBoxes[j].setFillColor(sf::Color(150,150,150,255));
+    }
 }
 
 void SignUpForm::deactivate()
@@ -115,8 +124,19 @@ void SignUpForm::deactivate()
     for (auto i : this->textBoxes)
     {
         i.active = false;
-        i.setFillColor(sf::Color(200,200,200,255));
+        i.setFillColor(sf::Color(150,150,150,255));
     }
+}
+
+bool SignUpForm::hovering(sf::Vector2f mousePos)
+{
+    for (auto i : this->clickables)
+    {
+        if (i.contains(mousePos))
+            return true;
+    }
+    
+    return false;
 }
 
 void SignUpForm::setTextOriginToCenter(sf::Text& txt)

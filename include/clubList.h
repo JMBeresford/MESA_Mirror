@@ -14,7 +14,10 @@ public:
     void setSpriteOriginToCenter(sf::Sprite&);
     Club& getClub(unsigned i);
     void drawClubs();
+    bool hovering(sf::Vector2f);
+
     std::vector<sf::Text> getTexts();
+    std::vector<sf::FloatRect> cells;
 
 private:
     sf::Font fnt;

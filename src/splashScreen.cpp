@@ -22,7 +22,7 @@ SplashScreen::SplashScreen(sf::RenderWindow& w)
     this->timeText.setFont(this->fnt);
     
     this->enterText.setString("Enter");
-    this->mesaText.setString("CODCS");
+    this->mesaText.setString("MESA");
 
     this->enterText.setCharacterSize(55); // Sets font size
     this->mesaText.setCharacterSize(55);

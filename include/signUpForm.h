@@ -10,24 +10,21 @@ class SignUpForm : public sf::RenderTexture
 public:
     SignUpForm(sf::RenderWindow&,Club&);
     void drawElements();
-    std::vector<sf::RectangleShape> clickables;
+    std::vector<sf::FloatRect> clickables;
     sf::RectangleShape submit;
 
     void setTextOriginToCenter(sf::Text&);
     void setSpriteOriginToCenter(sf::RectangleShape&);
     void activateText(unsigned);
     void deactivate();
+    bool hovering(sf::Vector2f);
 
     struct textBox : public sf::RectangleShape
     {
         textBox()  {this->active = false;
-                    this->setFillColor(sf::Color::White);
-                    this->cursor.setFillColor(sf::Color::Red);
-                    this->cursor.setSize(sf::Vector2f(3,this->getSize().y * 9/10));}
+                    this->setFillColor(sf::Color::White);}
         bool active;
         std::string str;
-        sf::Clock timer;
-        sf::RectangleShape cursor;
     };
     std::vector<textBox> textBoxes;
 
