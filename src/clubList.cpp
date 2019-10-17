@@ -22,6 +22,7 @@ ClubList::ClubList(sf::RenderWindow& window)
         std::string filePath = file.path().filename();
         filePath = "clubs/" + filePath;
         std::ifstream inFile(filePath);
+        std::vector<Member> members;
 
         json j;
 
@@ -34,7 +35,17 @@ ClubList::ClubList(sf::RenderWindow& window)
                     president = j["president"],
                     email = j["email"];
 
-        Club c(name, description, president, email);
+        for (auto i : j["members"])
+        {
+            std::string fname = i["fname"],
+                        lname = i["lname"],
+                        email = i["email"],
+                        phone = i["phone"];
+
+            members.emplace_back(Member(fname, lname, email, phone));
+        }
+
+        Club c(name, description, president, email, members);
 
         this->clubs.emplace_back(c);
     }

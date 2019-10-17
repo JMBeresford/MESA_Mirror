@@ -1,7 +1,12 @@
-#include "club.h"
 #include <SFML/Graphics.hpp>
+#include <fstream>
+#include <experimental/filesystem>
+#include "club.h"
+#include "member.h"
 #include "nlohmann/json.hpp"
 using nlohmann::json;
+
+namespace fs = std::experimental::filesystem;
 
 Club::Club()
 {
@@ -10,12 +15,13 @@ Club::Club()
     this->president = "";
     this->email = "";
 }
-Club::Club(std::string& name,std::string& desc,std::string& pres,std::string& email)
+Club::Club(std::string& name,std::string& desc,std::string& pres,std::string& email, std::vector<Member> members)
 {
     this->name = name;
     this->description = desc;
     this->president = pres;
     this->email = email;
+    this->memberList = members;
 }
 
 std::string Club::getName()
@@ -65,6 +71,32 @@ std::string Club::fmtDescription(sf::RenderWindow& window, std::string s)
         }
         return temp;
     }
+}
+
+void Club::addMember(Member m)
+{
+    std::fstream _file;
+    std::string fpath = "clubs/" + this->getName() + ".json";
+
+    this->memberList.emplace_back(m);
+
+    json j = json::object(), j_member;
+
+    j_member["fname"] = m.getFirstName();
+    j_member["lname"] = m.getLastName();
+    j_member["email"] = m.getEmail();
+    j_member["phone"] = m.getPhone();
+
+    _file.open(fpath, std::ios_base::in);
+
+    _file >> j;
+    _file.close();
+
+    j["members"][m.getFmtName()] = j_member;
+
+    _file.open(fpath, std::ios_base::out);
+
+    _file << j.dump(1,'\t');
 }
 
 void to_json(json& j, const Club& c)

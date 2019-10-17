@@ -17,6 +17,7 @@ public:
     void setSpriteOriginToCenter(sf::RectangleShape&);
     void activateText(unsigned);
     void deactivate();
+    void submitMember(Member);
     bool hovering(sf::Vector2f);
 
     struct textBox : public sf::RectangleShape

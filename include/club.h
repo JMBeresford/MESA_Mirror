@@ -13,13 +13,15 @@ struct Club
     Club(   std::string& name,
             std::string& description,
             std::string& president,
-            std::string& email);
+            std::string& email,
+            std::vector<Member>);
 
     std::string getName();
     std::string getDescription();
     std::string getPresident();
     std::string getEmail();
     std::string fmtDescription(sf::RenderWindow&,std::string);
+    void addMember(Member);
     void to_json(json&, const Club&);
     void from_json(const json&, Club&);
 

@@ -1,0 +1,26 @@
+{
+	"description": "The CODCS Club is a community for COD students to gather to collaborate with their peers and learn about computer science!",
+	"email": "president@codcs.club",
+	"members": {
+		"Beresford,John": {
+			"email": "secretary@codcs.club",
+			"fname": "John",
+			"lname": "Beresford",
+			"phone": "7607993498"
+		},
+		"Betsargon,Jason": {
+			"email": "email@email.com",
+			"fname": "Jason",
+			"lname": "Betsargon",
+			"phone": "76076706767"
+		},
+		"Carteno,Cristian": {
+			"email": "president@codcs.club",
+			"fname": "Christian",
+			"lname": "Carteno",
+			"phone": "5555555555"
+		}
+	},
+	"name": "CODCS Club",
+	"president": "Christian 'Chrispy' Carteno"
+}

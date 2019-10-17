@@ -21,7 +21,7 @@ SignUpForm::SignUpForm(sf::RenderWindow& window, Club& _club)
 
     this->firstName = (sf::Text("First Name:",this->fnt,25));
 
-    this->lastName = (sf::Text("Last Name:",this->fnt,25));
+    this->lastName = (sf::Text(" Last Name:",this->fnt,25));
 
     this->_email = (sf::Text("    Email:",this->fnt,25));
 
@@ -126,6 +126,11 @@ void SignUpForm::deactivate()
         i.active = false;
         i.setFillColor(sf::Color(150,150,150,255));
     }
+}
+
+void SignUpForm::submitMember(Member m)
+{
+    this->_club.addMember(m);
 }
 
 bool SignUpForm::hovering(sf::Vector2f mousePos)

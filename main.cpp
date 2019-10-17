@@ -177,7 +177,6 @@ void clubListScreen(sf::RenderWindow& window)
 		window.draw(clubsTex);
 		window.display();
 	}
-
 }
 
 void signUpFormScreen(sf::RenderWindow& window, Club& _club)
@@ -264,11 +263,7 @@ void signUpFormScreen(sf::RenderWindow& window, Club& _club)
 					{
 						Member m(	signUp.textBoxes[0].str,signUp.textBoxes[1].str,
 									signUp.textBoxes[2].str,signUp.textBoxes[3].str);
-						std::ofstream ofile;
-						ofile.open(signUp.textBoxes[0].str + "_" + signUp.textBoxes[1].str + ".json");
-
-						ofile << m.dump();
-						ofile.close();
+						signUp.submitMember(m);
 						return;
 					}
 					else
