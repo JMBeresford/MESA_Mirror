@@ -7,8 +7,9 @@
  - Nholmann's JSON for Modern C++ : https://github.com/nlohmann/json
  
 ### The ultimate goal is to allow for any club tied to STEM majors to add their club to the list on the mirror through our web app (WIP) which will also provide an interface for managing members and member information
+---
 
-### Operation of the mirror
+### Operation of the mirror:
 You are intially met with a landing page:  
 ![Landing Page](img/mesa1.png)  
   
