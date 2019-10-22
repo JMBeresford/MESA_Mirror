@@ -1,4 +1,4 @@
-# The software for a "Smart Mirror" desinged as a means to sign up for the Computer Science Club and other STEM related clubs in the MESA lab at College of the Desert
+# The software for a "Smart Mirror" designed as a means to sign up for the Computer Science Club and other STEM related clubs in the MESA lab at College of the Desert
  
 ### Technologies and materials used:
  - Raspberry Pi
