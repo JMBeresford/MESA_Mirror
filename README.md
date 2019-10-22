@@ -9,10 +9,18 @@
 ### The ultimate goal is to allow for any club tied to STEM majors to add their club to the list on the mirror through our web app (WIP) which will also provide an interface for managing members and member information
 
 ### Operation of the mirror
+You are intially met with a landing page:  
+![Landing Page](img/mesa1.png)  
+  
+You enter to find a list of available clubs to sign up for:  
+![Club List](img/mesa2.png)  
+  
+Upon choosing, you are directed to a sign up form:  
+![Sign Up Form](img/mesa3.png)
 
 
 #### Current Roadmap:
- - Basic Functionality and UI: 100%
+ - Basic Functionality and UI: 99%
  - Web App: ~10%
    - UI: 0%
    - Backend: 0%
