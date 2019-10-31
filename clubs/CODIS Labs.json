@@ -2,6 +2,12 @@
 	"description": "CODIS Labs explores many technologies including offensive and defensive intrusion techniques, networking, general programming, circuitry and much more!",
 	"email": "president@codis.club",
 	"members": {
+		",": {
+			"email": "",
+			"fname": "",
+			"lname": "",
+			"phone": ""
+		},
 		"Jacobs,Patrick": {
 			"email": "president@codis.club",
 			"fname": "Patrick",
@@ -13,6 +19,12 @@
 			"fname": "Logan",
 			"lname": "Nguyen",
 			"phone": "234234234"
+		},
+		"lemperis,maria": {
+			"email": "marialemperis@hotmail.com",
+			"fname": "maria",
+			"lname": "lemperis",
+			"phone": "7737019541"
 		}
 	},
 	"name": "CODIS Labs",

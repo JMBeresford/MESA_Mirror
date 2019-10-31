@@ -2,11 +2,17 @@
 	"description": "The CODCS Club is a community for COD students to gather to collaborate with their peers and learn about computer science!",
 	"email": "president@codcs.club",
 	"members": {
+		",": {
+			"email": "",
+			"fname": "",
+			"lname": "",
+			"phone": ""
+		},
 		"Beresford,John": {
-			"email": "secretary@codcs.club",
+			"email": "volcaus@gmail.com",
 			"fname": "John",
 			"lname": "Beresford",
-			"phone": "7607993498"
+			"phone": "5555555555"
 		},
 		"Betsargon,Jason": {
 			"email": "email@email.com",
